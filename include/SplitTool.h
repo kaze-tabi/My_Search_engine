@@ -1,3 +1,5 @@
+/*纯抽象类*/
+
 #ifndef __SPLIT_TOOL_H__
 #define __SPLIT_TOOL_H__
 
@@ -7,11 +9,10 @@
 using std::string;
 using std::vector;
 
-class SplitTool{
+class SplitTool
+{
 public:
-
-vector<string> cut();
-
+    virtual vector<string> cut(const string &sentence) = 0;
 };
 
-#endif  //__SPLIT_TOOL_H__
+#endif //__SPLIT_TOOL_H__

@@ -1,37 +1,42 @@
 #ifndef __DICT_PRODUCER_H__
 #define __DICT_PRODUCER_H__
 
-#include "SplitTool.h"
+#include "SplitToolCppThulac.h"
 #include <string>
 #include <vector>
 #include <set>
 #include <map>
 
+using std::map;
+using std::pair;
+using std::set;
 using std::string;
 using std::vector;
-using std::pair;
-using std::set; 
-using std::map;
 
-class DictProducer {
+class DictProducer
+{
 public:
+    DictProducer(const string &dir, const string &stopWordsPath); // 构造函数（英文）
 
-DictProducer(string);
+    DictProducer(const string &dir, const string &stopWordsPath, SplitTool *splitTool); // 构造函数（中文）
 
-void buildEnDict();
+    void buildEnDict(); // 构造英文词典
 
-void buildCnDict();
+    void buildCnDict(); // 构造中文词典
 
-void createIndex();
+    void createIndex(); // 构造词典位置索引
 
-void store();
+    void store();
+
+    /*测试用*/
+    void showDict();  // 显示词典
+    void showFiles(); // 显示语料库文件
 
 private:
-
-vector<string> _files;
-vector<pair<string, int>> _dict;
-map<string, set<int>> _index;
-SplitTool * _cuttor;
-
+    vector<string> _files;        // 语料库文件的绝对路径
+    map<string, int> _dict;       // 词典
+    map<string, set<int>> _index; // 词典索引
+    SplitToolCppThulac *_cuttor;  // 分词工具
+    string _stop_words_path;      // 停用词文件绝对路径
 };
 #endif //__DICT_PRODUCER_H__

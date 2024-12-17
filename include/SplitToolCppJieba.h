@@ -2,12 +2,12 @@
 #define __SPLIT_TOOL_CPP_JIEBA_H__
 
 #include "SplitTool.h"
+#include "../vendor/cppjieba/Jieba.hpp"
 
-class SplitToolCppJieba: public SplitTool {
-public: 
-    
-vector<string> cut();
+class SplitToolCppThulac : public SplitTool
+{
+public:
+    vector<string> cut(const string &sentence);
 };
 
-
-#endif  //__SPLIT_TOOL_CPP_JIEBA_H__
+#endif //__SPLIT_TOOL_CPP_THULAC_H__

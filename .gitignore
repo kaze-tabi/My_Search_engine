@@ -31,6 +31,12 @@
 *.out
 *.app
 
+#vscode配置
 .vscode
 .ycm_extra_conf.py
+
+#thulac模型
 models
+
+#语料
+data
