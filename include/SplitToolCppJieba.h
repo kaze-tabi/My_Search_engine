@@ -4,9 +4,13 @@
 #include "SplitTool.h"
 #include "../vendor/cppjieba/Jieba.hpp"
 
-class SplitToolCppThulac : public SplitTool
+class SplitToolCppJieba : public SplitTool
 {
+private:
+    cppjieba::Jieba _jieba;
+
 public:
+    SplitToolCppJieba();
     vector<string> cut(const string &sentence);
 };
 
