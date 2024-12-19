@@ -88,7 +88,6 @@ void DictProducer::buildEnDict()
         }
         // 读取文件内容
         string content((istreambuf_iterator<char>(infile)), istreambuf_iterator<char>());
-        cout << "File size: " << content.size() << "\n";
         // 将标点符号替换为空格
         for (auto &ch : content)
         {
@@ -169,7 +168,7 @@ void DictProducer::createIndex()
     for (auto &it : dictVector)
     {
         string word = it.first;
-        if (_en_cn == 1) // 英文
+        if (_en_cn == 0) // 英文
         {
             for (int i = 0; i < int(word.size()); ++i)
             {
@@ -181,7 +180,7 @@ void DictProducer::createIndex()
                 _index[letter].insert(subscript);
             }
         }
-        else if (_en_cn == 0) // 中文
+        else if (_en_cn == 1) // 中文
         {
             int wordSize = word.size();
             int i = 0;
@@ -228,8 +227,9 @@ void DictProducer::storeDict()
         exit(-1);
     }
 
-    // 将 JSON 对象写入文件
-    outFile << dictJson.dump(4); // 使用缩进为4的格式化输出
+   for (auto item : _dict) {
+    outFile << item.first << " " << item.second << '\n';
+  }
 
     // 关闭文件流
     outFile.close();
@@ -251,7 +251,7 @@ void DictProducer::showDict()
 void DictProducer::showFiles()
 {
     cout << "files:\n";
-    for (const auto &file : _files)
+    for (const auto &file : _index)
     {
         cout << file << "\n";
     }

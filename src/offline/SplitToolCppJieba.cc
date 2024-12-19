@@ -1,4 +1,4 @@
-#include "SplitToolCppJieba.h"
+#include "../offline/SplitToolCppJieba.h"
 #include <iostream>
 #include <vector>
 #include <string>

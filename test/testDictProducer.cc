@@ -22,6 +22,7 @@ int main()
         cn_dict.buildCnDict();
         cn_dict.storeDict();
         cn_dict.createIndex();
+        //cn_dict.showFiles();
         cn_dict.storeIndex();
         delete splitter;
     }
