@@ -29,7 +29,7 @@ public:
     void storeDict();
 
     void storeIndex();
-    
+
     set<string> loadStopWords(const string &stopWordsPath);
 
     /*测试用*/

@@ -31,7 +31,7 @@ public:
     // 预热方法
     void loadAllData(const string &enDictFile, const string &cnDictFile, const string &enIndexFile, const string &cnIndexFile);
     // 判断是否为中文字符串
-    bool isChineseString(const std::string &str);
+    bool isChineseString(const string &str);
 
     void showdEnDict();
     void showdCnDict();

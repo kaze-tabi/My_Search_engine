@@ -1,22 +1,35 @@
-#include "../offline/SplitToolCppJieba.h"
-#include <iostream>
-#include <vector>
-#include <string>
-
-const char *dict_path = "data/dict/jieba.dict.utf8";
-const char *model_path = "data/dict/hmm_model.utf8";
-const char *user_dict_path = "data/dict/user.dict.utf8";
-const char *idf_path = "data/dict/idf.utf8";
-const char *stop_word_path = "data/dict/stop_words.utf8";
+#include "SplitToolCppJieba.h"
 
 SplitToolCppJieba::SplitToolCppJieba()
-    : _jieba(dict_path, model_path, user_dict_path, idf_path, stop_word_path) // 初始化Jieba类对象
+:_jieba(nullptr)
 {
+    if(_jieba == nullptr)
+    {
+        string DICT_PATH = Configuration::getInstance()->getConfig("DICT_PATH");
+        string HMM_PATH = Configuration::getInstance()->getConfig("HMM_PATH");
+        string USER_DICT_PATH = Configuration::getInstance()->getConfig("USER_DICT_PATH");
+        string IDF_PATH = Configuration::getInstance()->getConfig("IDF_PATH");
+        string STOP_WORD_PATH = Configuration::getInstance()->getConfig("STOP_WORD_PATH");
+
+        _jieba = new cppjieba::Jieba(DICT_PATH, HMM_PATH, USER_DICT_PATH, IDF_PATH, STOP_WORD_PATH);
+    }
 }
 
-vector<string> SplitToolCppJieba::cut(const string &sentence)
+SplitToolCppJieba::~SplitToolCppJieba()
 {
-    vector<string> words;
-    _jieba.Cut(sentence, words);
-    return words;
+    if(_jieba)
+    {
+        delete _jieba;
+        _jieba = nullptr;
+    }
 }
+
+vector<string> SplitToolCppJieba::cut(const string & file_content)
+{
+    vector<string> ret;
+
+    _jieba->Cut(file_content, ret);
+
+    return ret;
+}
+
