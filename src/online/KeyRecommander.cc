@@ -1,14 +1,11 @@
-/**
- * Project SearchEngine
- */
-
 #include "KeyRecommander.h"
 #include <string.h>
 #include <vector>
 #include <algorithm>
-#include "Dictionary.h"
 #include <unordered_set>
 #include <boost/functional/hash.hpp>
+#include <queue>
+#include "../vendor/nlohmann/json.hpp"
 
 using boost::hash;
 using boost::hash_combine;
@@ -32,6 +29,10 @@ namespace std
     };
 }
 
+KeyRecommander::KeyRecommander(string sought) : _sought(sought)
+{
+}
+
 int KeyRecommander::distance(string candidate)
 {
     return editDistance(candidate, _sought);
@@ -45,18 +46,26 @@ void KeyRecommander::doQuery()
 
     vector<string> result;
     auto it = _sought.begin();
-    
-    while (it != _sought.end()) {
+
+    while (it != _sought.end())
+    {
         // 解析下一个 UTF-8 字符
         unsigned char lead = *it;
         int num_bytes = 1;
-        if ((lead & 0x80) == 0x00) { // 1-byte sequence
-            // Already set to 1
-        } else if ((lead & 0xE0) == 0xC0) { // 2-byte sequence
+        if ((lead & 0x80) == 0x00)
+        { // 1-byte sequence
+          // Already set to 1
+        }
+        else if ((lead & 0xE0) == 0xC0)
+        { // 2-byte sequence
             num_bytes = 2;
-        } else if ((lead & 0xF0) == 0xE0) { // 3-byte sequence
+        }
+        else if ((lead & 0xF0) == 0xE0)
+        { // 3-byte sequence
             num_bytes = 3;
-        } else if ((lead & 0xF8) == 0xF0) { // 4-byte sequence
+        }
+        else if ((lead & 0xF8) == 0xF0)
+        { // 4-byte sequence
             num_bytes = 4;
         }
 
@@ -160,4 +169,32 @@ int KeyRecommander::editDistance(const std::string &lhs, const std::string &rhs)
         }
     }
     return editDist[lhs_len][rhs_len];
+}
+
+string KeyRecommander::getResult()
+{
+    std::vector<CandidateResult> recommend_results;
+
+    // 将队列中的元素保存到临时向量中
+    while (!_resultQue.empty())
+    {
+        recommend_results.push_back(_resultQue.top());
+        _resultQue.pop();
+    }
+
+    nlohmann::json res_json;
+
+    // 将结果添加到 JSON 中
+    for (const auto &result : recommend_results)
+    {
+        res_json.push_back(result._word.first);
+    }
+
+    // 将临时向量中的元素重新推入优先队列
+    for (auto it = recommend_results.rbegin(); it != recommend_results.rend(); ++it)
+    {
+        _resultQue.push(*it);
+    }
+
+    return res_json.dump();
 }

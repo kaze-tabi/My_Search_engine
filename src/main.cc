@@ -1,15 +1,38 @@
 #include "SearchEngineServer.h"
+#include "CacheManager.h"
+CacheManager server_cache_manager;
 
-int main()
+long cache_syn_time = std::stol(Configuration::getInstance()->getConfig("CacheSynTime"));
+
+void timerFunc(WFTimerTask * timer_task)
 {
-    SearchEngineServer server(4); // 初始化线程池大小为4
-    server.loadModules(); // 加载所有模块
-    server.start(8080); // 启动HTTP服务器在端口8080
+    WFTimerTask * task  = WFTaskFactory::create_timer_task(cache_syn_time, 0, timerFunc);
 
-    // 保持服务器运行
-    while (true) {
-        // 服务器主循环
-    }
+    server_cache_manager.updateAllThreadDoubleCache();
+
+    series_of(timer_task)->push_back(task);
+}
+
+void setTimer()
+{
+    WFTimerTask * timer_task = WFTaskFactory::create_timer_task(cache_syn_time, 0, timerFunc);
+
+    timer_task->start();
+}
+
+void test()
+{
+    SearchEngineServer server(1);
+
+    setTimer();
+
+    server.start();
+}
+
+int main(void)
+{
+    test();
 
     return 0;
 }
+

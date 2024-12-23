@@ -97,6 +97,11 @@ void Dictionary::loadCnDictFromFile(const string &filename)
     }
 }
 
+SplitTool * Dictionary::getSplitTool()
+{
+    return _splitTool;
+}
+
 void Dictionary::loadEnIndexFromFile(const string &filename)
 {
     ifstream file(filename);

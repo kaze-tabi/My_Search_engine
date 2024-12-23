@@ -33,5 +33,5 @@ void DirScanner::traverse(const string &dir)
         string path = dir + "/" + dirent->d_name;
         _files.push_back(path);
     }
-    closedir(dirp);
+    closedir(dirp); 
 }
